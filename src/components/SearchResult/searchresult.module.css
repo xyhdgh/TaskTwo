@@ -1,0 +1,35 @@
+.container {
+  width: 100vw;
+  height: .68rem;
+  background: #FAF9FC;
+  position: relative;
+}
+.container .left {
+  font-family: 'SourceSansPro-Semibold';
+  font-size: .16rem;
+  color: #8560A9;
+  position: absolute;
+  top: .14rem;
+  left: .27rem;
+}
+.container button {
+  position: absolute;
+  top: .12rem;
+  right: .15rem;
+  font-family: 'SourceSansPro-Semibold';
+  font-size: .1rem;
+  color: #67616D;
+  padding: .06rem .09rem .05rem .1rem;
+  background: #D5EF7F;
+  border: none;
+  outline: none;
+  border-radius: .12rem;
+}
+.container .describe {
+  font-family: 'SourceSansPro-Regular';
+  font-size: .12rem;
+  color: #67616D;
+  position: absolute;
+  left: .27rem;
+  bottom: .11rem;
+}

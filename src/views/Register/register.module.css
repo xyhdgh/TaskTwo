@@ -1,0 +1,85 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+}
+header {
+  width: 100%;
+  height: 2.87rem;
+  background: #E8E8E8;
+  position: relative;
+}
+header div {
+  width: .67rem;
+  height: .67rem;
+  border-radius: 50%;
+  background-color: #FAFAFA;
+  position: absolute;
+  left: 1.27rem;
+  top: .9rem;
+}
+header p {
+  position: absolute;
+  top: 1.72rem;
+  left: 1.295rem;
+  width: .6rem;
+  height: .25rem;
+  text-align: center;
+  line-height: .25rem;
+  color: #666666;
+  font-size: .2rem;
+  font-family: 'SourceSansPro-Regular';
+}
+.footer {
+  width: 100%;
+  height: .56rem;
+  background-color: #BABABA;
+  color: #fff;
+  text-align: center;
+  line-height: .56rem;
+  font-size: .16rem;
+}
+.content {
+  width: 100%;
+  height: calc(100vh - 3.43rem);
+}
+.content form {
+  width: 100%;
+  height: calc(100vh - 3.43rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.content form div {
+  width: 2.2rem;
+  height: .4rem;
+  border-radius: .04rem;
+  margin-bottom: .16rem;
+  border: .01rem solid #E8E8E8;
+  display: flex;
+  position: relative;
+}
+.content form div:first-child {
+  margin-top: .16rem;
+}
+.content input {
+  border: none;
+  outline: none;
+  padding-left: .28rem;
+  color: #BABABA;
+  font-size: .12rem;
+  font-family: 'SourceSansPro-Regular';
+  width: 100%;
+}
+.content form div label {
+  position: absolute;
+  display: block;
+  width: .133rem;
+  height: .133rem;
+  top: .133rem;
+  left: .053rem;
+}
+label img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

@@ -1,0 +1,126 @@
+.container {
+  overflow: auto;
+  flex: 1;
+}
+.scrollBar {
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  padding-top: .29rem;
+  padding-left: .16rem;
+}
+.box {
+  margin-top: .16rem;
+  border-bottom: .01rem solid #E8E8E8;
+  position: relative;
+}
+.box:first-child {
+  margin-top: 0;
+}
+.box .top {
+  height: .2rem;
+}
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.top img, .top span {
+  float: left;
+}
+.top button {
+  float: right;
+  margin-right: .16rem;
+  outline: none;
+  border: .01rem solid #D3C1E5;
+  color: #8560A9;
+  border-radius: .1rem;
+  font-size: .12rem;
+  font-family: 'SourceSansPro-Regular';
+  padding: .01rem .05rem .02rem .09rem;
+}
+.top img {
+  width: .2rem;
+  height: .2rem;
+}
+.top span {
+  display: inline-block;
+  font-family: 'SourceSansPro-Semibold';
+  font-size: .12rem;
+  color: #67616D;
+  margin-left: .08rem;
+  margin-top: .03rem;
+}
+.title {
+  margin-top: .08rem;
+  width: 2.88rem;
+  font-family: 'SourceSansPro-Semibold';
+  font-size: .18rem;
+  color: #453257;
+}
+.time {
+  width: 100%;
+  display: flex;
+}
+
+.time div {
+  font-family: 'SourceSansPro-Regular';
+  font-size: .12rem;
+  color: #8560A9;
+  padding-left: .05rem;
+  margin-top: .08rem;
+}
+.time img {
+  width: .12rem;
+  height: .12rem;
+  margin-top: .1rem;
+}
+.content {
+  width: 2.88rem;
+  font-family: 'SourceSansPro-Regular';
+  font-size: .14rem;
+  color: #67616D;
+  margin-top: .12rem;
+}
+.bottom {
+  width: 100%;
+  display: flex;
+  padding-bottom: .16rem;
+}
+.bottom > div {
+  display: flex;
+}
+.bottom > div:first-child img {
+  width: .12rem;
+  height: .098rem;
+  margin-top: .15rem;
+}
+.bottom > div:last-child img {
+  width: .1rem;
+  height: .092rem;
+  margin-top: .155rem;
+  margin-left: .31rem;
+}
+.bottom > div span {
+  font-size: .12rem;
+  font-family: 'SourceSansPro-Regular';
+  color: #453257;
+  margin-top: .12rem;
+}
+.bottom > div:first-child span {
+  padding-left: .05rem;
+}
+.bottom > div:last-child span {
+  padding-left: .06rem;
+}
+/* 右侧存在图片时标题的样式 */
+.change {
+  width: 2.16rem !important;
+}
+.descImg {
+  width: .64rem;
+  height: .64rem;
+  position: absolute;
+  top: .28rem;
+  right: .16rem;
+}

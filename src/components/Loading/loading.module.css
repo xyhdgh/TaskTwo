@@ -1,0 +1,42 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 10;
+}
+.box {
+  width: 1rem;
+  height: .8rem;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: .1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box .rotate {
+  width: .2rem;
+  height: .2rem;
+  border-radius: 50%;
+  background: transparent;
+  border-top: .05rem solid #00bcd4;
+  border-left: .05rem solid transparent;
+  border-right: .05rem solid transparent;
+  border-bottom: .05rem solid transparent;
+  transform-origin: center;
+  animation: animate .3s linear infinite;
+}
+@keyframes animate {
+  0% {
+    transform: rotate(0)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
