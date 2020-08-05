@@ -10,7 +10,6 @@
   padding-left: .16rem;
 }
 .box {
-  margin-top: .16rem;
   border-bottom: .01rem solid #E8E8E8;
   position: relative;
 }
@@ -57,6 +56,7 @@
   font-family: 'SourceSansPro-Semibold';
   font-size: .18rem;
   color: #453257;
+  height: .46rem;
 }
 .time {
   width: 100%;
@@ -81,6 +81,10 @@
   font-size: .14rem;
   color: #67616D;
   margin-top: .12rem;
+  text-overflow: ellipsis;
+  height: .54rem; 
+  overflow: hidden;
+  white-space: inherit;
 }
 .bottom {
   width: 100%;
@@ -121,6 +125,11 @@
   width: .64rem;
   height: .64rem;
   position: absolute;
-  top: .28rem;
+  top: .44rem;
   right: .16rem;
+}
+.special {
+  width: 2.16rem !important;
+  height: .72rem !important;
+  text-overflow: ellipsis;
 }

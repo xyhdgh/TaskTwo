@@ -33,6 +33,12 @@ header div:last-child {
   width: .24rem;
   height: .24rem;
   margin-right: .14rem;
-  background: #fff;
   border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+header .right img {
+  width: .24rem;
+  height: .24rem;
+  position: absolute;
 }

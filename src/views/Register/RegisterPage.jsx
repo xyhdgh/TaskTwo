@@ -10,11 +10,9 @@ const RegisterPage = () => {
   const { username, setUserName, password, setPassWord, email, setEmail, userSvg, passSvg, emailSvg } = useUserInfo()
   const history = useHistory()
   const handleRegister = () => {
-    let res = register('/join', { username, password, email, avatar })
-    res.then(v => {
-      if (v.status === 200) {
-        sessionStorage.setItem('token', v.data.token)
-        sessionStorage.setItem('userId', v.data.userId)
+    register('/join', { username, password, email, avatar }).then(res => {
+      if (res.status === 200) {
+        sessionStorage.setItem('token', res.data.token)
         history.goBack()
       }
     }).catch(err => {

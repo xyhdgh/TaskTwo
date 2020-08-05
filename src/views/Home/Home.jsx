@@ -5,17 +5,16 @@ import MineEvents from '../../components/MineEvents/MineEvents.jsx'
 import Aside from '../Aside/Aside.jsx'
 import Loading from '../../components/Loading/Loading.jsx'
 import { useHistory } from 'react-router-dom'
-import { get_events, cancel_login } from '../../api/http.js'
+import { get_events } from '../../api/http.js'
 import beautyTime from '../../util/beautyTime.js'
 
 const Home = () => {
-  const style = {
-    paddingTop: '0.16rem'
-  }
   const searchStyle = {
     width: '0.18rem',
     height: '0.18rem'
   }
+  // 获取过滤后的参数
+  const [filterData, setFilterData] = useState({})
   // 获取数据
   const [events, setEvents] = useState([])
   // 判断获取更多
@@ -53,14 +52,14 @@ const Home = () => {
     asideRef.current.selfRef.current.style.transform = 'translateX(0)'
   }
   useEffect(() => {
-    let filterData = asideRef.current.filterData
+    setFilterData(asideRef.current.filterData)
     let token = sessionStorage.getItem('token')
     if (!token) {
       history.push('/login')
     } else {
       setIsLoading(true)
       get_events('/events', filterData, token).then(res => {
-        console.log('res::', res);
+        // console.log(res);
         if (res.status === 200) {
           const {events, hasMore} = res.data;
           events.forEach((event) => {
@@ -107,7 +106,7 @@ const Home = () => {
     <div>
       <div className={homeStyle.container} ref={homeRef}>
         <Header flag={"search"} style={searchStyle}></Header>
-        {isLoading ? "" : <MineEvents style={style} dataList={{events, hasMore}} currentData={asideRef.current} />}
+        {isLoading ? "" : <MineEvents dataList={{events, hasMore}} currentData={asideRef.current} filterData={filterData} />}
       </div>
       <Aside ref={asideRef} handleSearch={handleSearch} />
       {isLoading && <Loading />}

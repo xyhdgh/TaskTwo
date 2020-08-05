@@ -8,8 +8,14 @@
   height: .72rem;
   border: .02rem solid #8560A9;
   border-radius: 50%;
-  background: #fff;
   margin: .36rem auto 0;
+  position: relative;
+  overflow: hidden;
+}
+.main .top img {
+  width: .72rem;
+  height: .72rem;
+  position: absolute;
 }
 .main .middle {
   width: 1.03rem;
@@ -29,7 +35,6 @@
   width: 1.73rem;
   margin: .08rem auto 0;
   display: flex;
-
 }
 .main .bottom .info div {
   width: .16rem;
@@ -41,6 +46,8 @@
   color: #8560A9;
   padding-left: .06rem;
   font-family: 'SourceSansPro-Regular';
+  flex: 1;
+  text-align: center;
 }
 .activity {
   width: 100%;

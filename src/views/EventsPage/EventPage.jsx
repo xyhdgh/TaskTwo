@@ -17,14 +17,14 @@ import likeOutLineOneSvg from '../../static/svgs/like-outline-sel-one.svg'
 import checkOutLineOneSvg from '../../static/svgs/check-outline-one.svg'
 import checkOneSvg from '../../static/svgs/check-one.svg'
 import likeOneSvg from '../../static/svgs/like-one.svg'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import FooterComment from '../../components/FooterComment/FooterComment.jsx'
 import { get_event_detail } from '../../api/http.js'
 import Loading from '../../components/Loading/Loading.jsx'
-import {getCurrentStamp, initialTime} from '../../util/getTime.js'
-import {get_event_participants} from '../../api/http.js'
+import { getCurrentStamp, initialTime } from '../../util/getTime.js'
+import { get_event_participants, join_event_participants, cancel_event_participants, get_event_comments, get_event_likes, post_event_likes, cancel_event_likes } from '../../api/http.js'
 
-const EventPage = withRouter(({match}) => {
+const EventPage = withRouter(({ match }) => {
   const [tabInfo, setTabInfo] = useState([
     {
       id: 1,
@@ -51,121 +51,26 @@ const EventPage = withRouter(({match}) => {
       tempSvg: commentOutlineSvg
     }
   ])
+  let offset = 0;
+  let limit = 25;
   // 点击按钮展开描述
   const [showDesc, setShowDesc] = useState(false)
   // 评论内容
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      avator: "",
-      username: "Little Prince",
-      publish_time: "9 hours ago",
-      replySvg: replySvg,
-      comment: "Nullam ut tincidunt nunc. Petus lacus, commodo eget justo ut, rutrum varius nunc."
-    },
-    {
-      id: 2,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "9 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 3,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 4,
-      avator: "Petus lacus, commodo!!",
-      username: "Little Princess",
-      publish_time: "9 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 5,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 6,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 7,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 8,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 9,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 10,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    },
-    {
-      id: 11,
-      avator: "",
-      username: "Little Princess",
-      publish_time: "1 hours ago",
-      replySvg: replySvg,
-      comment: "Petus lacus, commodo!!"
-    }
-  ])
+  const [comments, setComments] = useState([])
   // 存储participants数组
   const [partUsers, setPartUsers] = useState([])
+  // 存储likes数组
+  const [likeUsers, setLikeUsers] = useState([])
   // 存储join状态
   const [joinStatus, setJoinStatus] = useState(false)
   // 存储点赞状态
   const [thumbsUp, setThumbsUp] = useState(false)
-  // 存储partRef距离顶部的距离
-  const [partHeight, setPartHeight] = useState(0)
   // 获取滑动框
   const scrollRef = useRef()
   // 获取指定元素
   const partRef = useRef()
   // 获取header
   let headerRef = useRef()
-  // 存储header高度
-  const [headHeight, setHeadHeight] = useState(0)
-  // 存储tab高度
-  let [tabHeight, setTabHeight] = useState(0)
-  // 获取tabUl
-  let tabRef = useRef()
-  // 获取tabList距顶部距离
-  const [tablistTop, setTablistTop] = useState(0)
   // 切换组件的标示
   const [flag, setFlag] = useState(true)
   // 存储回复人的名字
@@ -173,53 +78,13 @@ const EventPage = withRouter(({match}) => {
   let eventsRef = useRef()
   // 获取评论区距离
   let commentRef = useRef()
-  // 存储评论区距顶部高度
-  const [commentHeight, setCommentHeight] = useState(0)
-  let htmlFontSize = document.documentElement.style.fontSize; // 100
+  // let htmlFontSize = parseFloat(document.documentElement.style.fontSize); // 100
   const [isLoading, setIsLoading] = useState(false)
   // 请求数据
   const [event, setEvent] = useState({})
-  // 区分tab样式
-  const diffTab = (num) => {
-    const currentTabArr = [...tabInfo]
-    currentTabArr.forEach(tab => {
-      tab.isActive = false
-      if (tab.id === num) {
-        tab.isActive = true
-      }
-    })
-    setTabInfo(currentTabArr)
-  }
-  // 滚动事件
-  const handleScroll = e => {
-    let scrollTop = e.target.scrollTop;
-    let commentOffsetTop = commentRef.current.offsetTop;
-    setCommentHeight(commentOffsetTop)
-    let headHeight = headerRef.current.headHeight;
-    setHeadHeight(headHeight)
-    let partOffsetTop = partRef.current.offsetTop;
-    setPartHeight(partOffsetTop)
-    let tabHeight = tabRef.current.offsetHeight;
-    setTabHeight(tabHeight)
-    const partDiff = partOffsetTop - scrollTop - headHeight - tabHeight;
-    const commentDiff = commentOffsetTop - scrollTop - headHeight - tabHeight;
-    if (partDiff > 0) { // 第一个tab
-      diffTab(1)
-    }
-    if (partDiff < 0 || partDiff === 0) { // 第二个tab
-      diffTab(2)
-    }
-    if (commentDiff < parseInt(htmlFontSize) * 0.24 || commentDiff === parseInt(htmlFontSize) * 0.24) { // 第三个tab
-      diffTab(3)
-    } 
-  }
-  useEffect(() => {
-    scrollRef.current.addEventListener('scroll', handleScroll, false)
-    return () => {
-      scrollRef.current.removeEventListener('scroll', handleScroll, false)
-    }
-  }, [])
-  const checkTab = ({ id }) => {
+  const [showStatistical, setShowStatistical] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+  const checkTab = async ({ id }) => {
     let token = sessionStorage.getItem('token')
     const currentArr = [...tabInfo]
     currentArr.forEach((item) => {
@@ -230,19 +95,35 @@ const EventPage = withRouter(({match}) => {
     })
     setTabInfo(currentArr)
     if (id === 1) {
-      scrollRef.current.scrollTop = tablistTop;
+      console.log('details...');
     } else if (id === 2) {
-      scrollRef.current.scrollTop = partHeight - tabHeight - headHeight;
-      // 请求...
-      get_event_participants(`/events/${match.params.id}/participants`, token).then(res => {
+      await new Promise((resolve, reject) => {
+        // 请求...
+        get_event_participants(`/events/${match.params.id}/participants`, token).then(res => {
+          if (res.status === 200) {
+            setPartUsers(res.data.users)
+            resolve()
+          }
+        }).catch(err => reject(err))
+      })
+
+      await new Promise((resolve, reject) => {
+        get_event_likes(`/events/${match.params.id}/likes`, { offset, limit }, token).then(res => {
+          if (res.status === 200) {
+            console.log(res.data);
+            setShowStatistical(true)
+            setLikeUsers(res.data.users)
+            resolve()
+          }
+        }).catch(err => reject(err))
+      })
+    } else if (id === 3) {
+      get_event_comments(`/events/${match.params.id}/comments`, { offset, limit }, token).then(res => {
         if (res.status === 200) {
-          console.log(res);
-          setPartUsers(res.data.users)
-          // console.log(partUsers);
+          setComments(res.data.comments)
+          setShowComments(true)
         }
       }).catch(err => Promise.reject(err))
-    } else if (id === 3) {
-      scrollRef.current.scrollTop = commentHeight - tabHeight - headHeight - parseInt(htmlFontSize) * .24;
     }
   }
   // 请求...
@@ -253,8 +134,10 @@ const EventPage = withRouter(({match}) => {
     if (token) {
       get_event_detail('/events/' + id, token).then(res => {
         if (res.status === 200) {
+          setJoinStatus(res.data.event.me_going)
+          setThumbsUp(res.data.event.me_likes)
           setIsLoading(false)
-          let currentData = {...res.data.event}
+          let currentData = { ...res.data.event }
           // 获取时间差
           let stampDiff;
           let create_stamp = new Date(res.data.event.create_time).getTime()
@@ -266,24 +149,48 @@ const EventPage = withRouter(({match}) => {
           let end_time = initialTime(new Date(res.data.event.end_time).toString())
           currentData['create_time'] = create_time
           currentData['end_time'] = end_time
-          // console.log('currentData::', currentData);
           setEvent(currentData)
         }
       }).catch(err => Promise.reject(err))
     }
   }, [])
   const handleGo = () => {
-    // console.log(match.params.id);
-    // 请求...
-    setJoinStatus(true)
+    let token = sessionStorage.getItem('token')
+    if (joinStatus) {
+      cancel_event_participants(`/events/${match.params.id}/participants`, token)
+        .then(res => {
+          if (res) {
+            setJoinStatus(false)
+          }
+        }).catch(err => Promise.reject(err))
+    } else {
+      join_event_participants(`/events/${match.params.id}/participants`, token)
+        .then(res => {
+          if (res.status === 200) {
+            setJoinStatus(true)
+          }
+        }).catch(err => Promise.reject(err))
+    }
   }
   const handleHumbsUp = () => {
     if (!joinStatus) {
       return
     } else {
-      // console.log(match.params.id);
+      let token = sessionStorage.getItem('token')
       // 请求...
-      setThumbsUp(!thumbsUp)
+      if (thumbsUp) {
+        cancel_event_likes(`/events/${match.params.id}/likes`, token).then(res => {
+          if (res.status === 200) {
+            setThumbsUp(false)
+          }
+        }).catch(err => Promise.reject(err))
+      } else {
+        post_event_likes(`/events/${match.params.id}/likes`, token).then(res => {
+          if (res.status === 200) {
+            setThumbsUp(true)
+          }
+        }).catch(err => Promise.reject(err))
+      }
     }
   }
   const handleComment = () => {
@@ -294,20 +201,32 @@ const EventPage = withRouter(({match}) => {
       setReplyUser("")
     }
   }
-  const reply = ({username}) => {
+  const reply = ({ user }) => {
     if (!joinStatus) {
       return
     } else {
       if (flag) {
         setFlag(false)
       }
-      setReplyUser(`@${username}`)
+      setReplyUser(`@${user.username}`)
     }
+  }
+  const handleScroll = () => {
+    // 没有下拉加载的数据
+    // if (showComments && showStatistical) {
+    //   let eventsHeight = eventsRef.current.offsetHeight + htmlFontSize * 2.4;
+    //   let clientHeight = scrollRef.current.offsetHeight
+    //   let scrollTop = e.target.scrollTop
+    //   // console.log(scrollTop, clientHeight, eventsHeight);
+    //   if (scrollTop + clientHeight > eventsHeight - 10) {
+    //     console.log('触底了');
+    //   }
+    // }
   }
   return (
     <div className={eventPageStyle.container} >
       <Header ref={headerRef}></Header>
-      <div className={eventPageStyle.content} ref={scrollRef}>
+      {isLoading ? <Loading /> : (<div className={eventPageStyle.content} ref={scrollRef} onScroll={handleScroll}>
         <div className={eventPageStyle.top}>
           <div className={eventPageStyle.channel}>{event.channel?.name}</div>
           <p className={eventPageStyle.title}>{event.name}</p>
@@ -319,7 +238,7 @@ const EventPage = withRouter(({match}) => {
             </div>
           </div>
         </div>
-        <div className={eventPageStyle.tabList} ref={tabRef}>
+        <div className={eventPageStyle.tabList}>
           <ul>
             {tabInfo.map((tab) => {
               return (
@@ -337,7 +256,7 @@ const EventPage = withRouter(({match}) => {
               {event.images?.map((img, idx) => {
                 return (
                   <li key={idx}>
-                    <img src={img} alt="img"/>
+                    <img src={img} alt="img" />
                   </li>
                 )
               })}
@@ -374,9 +293,9 @@ const EventPage = withRouter(({match}) => {
             </div>
             <div className={eventPageStyle.map}></div>
           </div>
-          <div className={eventPageStyle.statistical} ref={partRef}>
+          {showStatistical ? <div className={eventPageStyle.statistical} ref={partRef}>
             <div className={eventPageStyle.goLikeWrapper}>
-              <div className={eventPageStyle.wrapperTop}>
+              <div className={`${eventPageStyle.wrapperTop} ${eventPageStyle.clearfix}`}>
                 <div className={eventPageStyle.wrapperTopLeft}>
                   <img src={checkOutLineSvg} alt="img" />
                   <span>{partUsers.length} going</span>
@@ -393,56 +312,57 @@ const EventPage = withRouter(({match}) => {
                   </ul>
                 </div>
               </div>
-              <div className={eventPageStyle.wrapperBottom}>
+              <div className={`${eventPageStyle.wrapperBottom} ${eventPageStyle.clearfix}`}>
                 <div className={eventPageStyle.wrapperBottomLeft}>
                   <img src={likeOutLineSvg} alt="img" />
-                  <span>7 likes</span>
+                  <span>{likeUsers.length} likes</span>
                 </div>
                 <div className={eventPageStyle.wrapperBottomRight}>
                   <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    {likeUsers.map(user => {
+                      return (
+                        <li key={user.id}>
+                          <img src={user.avatar} alt="img"/>
+                        </li>
+                      )
+                    })}
                   </ul>
                 </div>
               </div>
             </div>
-          </div>
-          <div className={eventPageStyle.commentsSection} ref={commentRef}>
+          </div> : null}
+          {showComments ? <div className={eventPageStyle.commentsSection} ref={commentRef}>
             {comments.map((comment) => {
               return (
                 <div key={comment.id} className={eventPageStyle.commentAll}>
-                  <div className={eventPageStyle.commentAvator}></div>
+                  <div className={eventPageStyle.commentAvator}>
+                    <img src={comment.user.avatar} alt="img" />
+                  </div>
                   <div className={eventPageStyle.main}>
                     <div className={eventPageStyle.userInfo}>
-                      <div className={eventPageStyle.username}>{comment.username}</div>
-                      <div className={eventPageStyle.replyTime}>{comment.publish_time}</div>
-                      <img src={comment.replySvg} alt="img" onTouchStart={() => reply(comment)}/>
+                      <div className={eventPageStyle.username}>{comment.user.username}</div>
+                      <div className={eventPageStyle.replyTime}>{comment.create_time}</div>
+                      <img src={replySvg} alt="img" onTouchStart={() => reply(comment)} />
                     </div>
                     <div className={eventPageStyle.commentContent}>{comment.comment}</div>
                   </div>
                 </div>
               )
             })}
-          </div>
+          </div> : null}
         </div>
-      </div>
+      </div>)}
       {/* 底部按钮 */}
       {flag ? <footer>
         <div className={eventPageStyle.footLeft}>
-          <img src={commentSingleSvg} alt="img" onTouchStart={handleComment}/>
-          <img src={thumbsUp ? likeOneSvg : likeOutLineOneSvg} alt="img" onTouchStart={handleHumbsUp}/>
+          <img src={commentSingleSvg} alt="img" onTouchStart={handleComment} />
+          <img src={thumbsUp ? likeOneSvg : likeOutLineOneSvg} alt="img" onTouchStart={handleHumbsUp} />
         </div>
         <div className={eventPageStyle.footRight} onTouchStart={() => handleGo()}>
           <img src={joinStatus ? checkOneSvg : checkOutLineOneSvg} alt="img" className={joinStatus ? eventPageStyle.sel : ""} />
           <span className={joinStatus ? eventPageStyle.join : ""}>{joinStatus ? "I am going" : "Join"}</span>
         </div>
-      </footer> : <FooterComment setFlag={setFlag} replyUser={replyUser} />}
-      {isLoading ? <Loading /> : null}
+      </footer> : <FooterComment setFlag={setFlag} replyUser={replyUser} id={match.params.id} />}
     </div>
   )
 })

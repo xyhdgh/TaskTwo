@@ -2,7 +2,7 @@ import React, {useRef, useEffect} from 'react'
 import loadingStyle from './loading.module.css'
 
 const Loading = () => {
-  const loadingRef = useRef(null)
+  const loadingRef = useRef()
   useEffect(() => {
     const stop = e => {
       e.preventDefault()

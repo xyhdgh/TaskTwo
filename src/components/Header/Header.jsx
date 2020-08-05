@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle, useRef} from 'react'
+import React, {forwardRef, useImperativeHandle, useRef, useEffect, useState} from 'react'
 import HeaderStyle from './Header.module.css'
 import HomeSvg from '../../static/svgs/home.svg'
 import LogoCatSvg from '../../static/svgs/logo-cat.svg'
@@ -11,6 +11,7 @@ const Header = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     headHeight: headRef.current.offsetHeight
   }), [])
+  const [avatar, setAvatar] = useState('')
   const history = useHistory()
   const judgeFlag = () => {
     if (props.flag === "search") {
@@ -31,15 +32,30 @@ const Header = forwardRef((props, ref) => {
       }).catch(err => Promise.reject(err))
     }
   }
+  const goMinePage = () => {
+    history.push('/mine')
+  }
+  useEffect(() => {
+    let token = sessionStorage.getItem('token')
+    if (token) {
+      const user = JSON.parse(sessionStorage.getItem('user'))
+      setAvatar(user.avatar)
+    } else {
+      return
+    }
+  }, [])
+
   return (
     <header ref={headRef}>
       <div className={HeaderStyle.left} onTouchStart={judgeFlag}>
         <img src={props.flag === "search" ? SearchSvg : HomeSvg} alt="img" style={props.style && props.style} />
       </div>
-      <div className={HeaderStyle.middle}>
+      <div className={HeaderStyle.middle} onTouchStart={cancalLogin}>
         <img src={LogoCatSvg} alt="img"/>
       </div>
-      <div className={HeaderStyle.right} onTouchStart={cancalLogin}></div>
+      <div className={HeaderStyle.right} onTouchStart={goMinePage}>
+        <img src={avatar} alt="img"/>
+      </div>
     </header>
   )
 })

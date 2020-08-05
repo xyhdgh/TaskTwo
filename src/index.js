@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import './util/rem.js';
-import '../src/static/fonts/font.module.css';
+// import './util/rem.js';
+import './static/fonts/font.module.css';
 
 ReactDOM.render(
   <App />,

@@ -25,7 +25,7 @@
 .top .channel {
   color: #8560A9;
   height: .22rem;
-  width: .91rem;
+  display: table;
   box-sizing: border-box;
   padding: .02rem .08rem .03rem .08rem;
   font-family: 'SourceSansPro-Regular';
@@ -44,7 +44,6 @@
   padding: .24rem .16rem .24rem .16rem;
   display: flex;
   height: .37rem;
-  border-bottom: .02rem solid #E8E8E8;
 }
 .desc .left {
   width: .36rem;
@@ -73,17 +72,18 @@
 .content .tabList {
   width: 100%;
   height: .45rem;
+  border-top: .01rem solid #e8e8e8;
   border-bottom: .02rem solid #E8E8E8;
   position: sticky;
   top: 0;
   background: #fff;
   z-index: 11;
 }
-ul {
-  display: flex;
-  align-items: center;
+.tabList ul {
   height: .45rem;
   line-height: .45rem;
+  display: flex;
+  align-items: center;
 }
 .tabList ul li {
   height: .45rem;
@@ -149,6 +149,9 @@ li span {
 .tabEvents .wrapper ul {
   width: 3.47rem;
   height: 1rem;
+  line-height: .45rem;
+  display: flex;
+  align-items: center;
 }
 .tabEvents .wrapper ul li {
   float: left;
@@ -329,7 +332,6 @@ li span {
 }
 .statistical {
   width: 100vw;
-  height: 1.15rem;
   border-top: .01rem solid #E8E8E8;
   border-bottom: .01rem solid #E8E8E8;
 }
@@ -338,17 +340,19 @@ li span {
 }
 .statistical .goLikeWrapper .wrapperTop {
   width: 100%;
-  height: .605rem;
   border-bottom: .01rem solid #E8E8E8;
-  display: flex;
 }
 .statistical .goLikeWrapper .wrapperBottom {
   width: 100%;
-  height: .525rem;
-  display: flex;
+}
+.wrapperTopLeft, .wrapperTopRight {
+  float: left;
 }
 .wrapperTopLeft, .wrapperBottomLeft {
   display: flex;
+}
+.wrapperBottomLeft, .wrapperBottomRight {
+  float: left;
 }
 .wrapperTopLeft img {
   width: .12rem;
@@ -375,19 +379,17 @@ li span {
   color: #67616D;
   margin-left: .06rem;
   margin-top: .175rem;
-  width: .32rem;
+  width: .43rem;
   display: inline-block;
 }
 .wrapperTopRight {
   padding-left: .17rem;
   padding-right: .16rem;
   width: 2.11rem;
-  height: .24rem;
-  margin-top: .24rem;
+  margin: .24rem 0;
 }
 .wrapperTopRight ul {
   width: 2.11rem;
-  height: .24rem;
   display: flex;
   flex-wrap: wrap;
 }
@@ -397,37 +399,51 @@ li span {
   border-radius: 50%;
   margin-left: .07rem;
   overflow: hidden;
+  position: relative;
 }
 .wrapperTopRight ul li img {
   width: .24rem;
   height: .24rem;
+  position: absolute;
 }
-.wrapperTopRight ul li:first-child {
+.wrapperTopRight ul li:nth-child(7n + 1) {
   margin-left: 0;
+}
+.wrapperTopRight ul li:nth-child(7)~li {
+  margin-top: .12rem;
 }
 .wrapperTopRight ul li:last-child {
   margin-left: .08rem;
 }
 .wrapperBottomRight {
-  padding-left: .28rem;
+  padding-left: .17rem;
   padding-right: .17rem;
   width: 2.1rem;
-  height: .24rem;
-  margin-top: .125rem;
+  margin: .125rem 0;
 }
 .wrapperBottomRight ul {
   width: 2.1rem;
-  height: .24rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 .wrapperBottomRight ul li {
+  position: relative;
   width: .24rem;
   height: .24rem;
   border-radius: 50%;
-  background-color: #00bcd4;
   margin-left: .07rem;
+  overflow: hidden;
 }
-.wrapperBottomRight ul li:first-child {
+.wrapperBottomRight ul li img {
+  position: absolute;
+  width: .24rem;
+  height: .24rem;
+}
+.wrapperBottomRight ul li:nth-child(7n + 1) {
   margin-left: 0;
+}
+.wrapperBottomRight ul li:nth-child(7)~li {
+  margin-top: .12rem;
 }
 .wrapperBottomRight ul li:nth-child(4), .wrapperBottomRight ul li:nth-child(7) {
   height: .239rem;
@@ -444,7 +460,13 @@ li span {
   width: .32rem;
   height: .32rem;
   border-radius: 50%;
-  background: #ff7000;
+  overflow: hidden;
+  position: relative;
+}
+.commentAll .commentAvator img {
+  width: .32rem;
+  height: .32rem;
+  position: absolute;
 }
 .commentAll .main {
   margin-left: .12rem;
@@ -527,3 +549,21 @@ footer .footRight span {
   color: #788C36;
   padding-left: .12rem;
 }
+/* .outPoll {
+  box-sizing: border-box;
+  border: .01rem solid #AC8EC9;
+  border-radius: 50%;
+  position: relative;
+}
+.outPoll .icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: .07rem;
+  height: .07rem;
+  border-right: .01rem solid #AC8EC9;
+  border-bottom: .01rem solid #AC8EC9;
+  transform: rotate(45deg);
+  transform-origin: center;
+} */

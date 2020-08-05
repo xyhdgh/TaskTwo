@@ -12,10 +12,10 @@ const LoginPage = () => {
   const handleLogin = () => {
     let data = login('/auth/token', {username, password})
     data.then(v => {
+      sessionStorage.setItem('user', JSON.stringify(v.data.user))
       sessionStorage.setItem('token', v.data.token)
       setUser(v.data.user)
       history.push('/')
-      console.log(user);
     }).catch(err => {
       Promise.reject(err)
     })

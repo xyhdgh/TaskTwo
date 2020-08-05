@@ -93,8 +93,8 @@ const Aside = forwardRef(({ handleSearch }, ref) => {
   const selTime = ({id, time}) => {
     switch (id) {
       case 1:
-        setStartStamp('')
-        setEndStamp('')
+        setStartStamp(0)
+        setEndStamp(0)
         setShowSearchBox(false)
         setButtonTip(time)
         break
@@ -179,7 +179,9 @@ const Aside = forwardRef(({ handleSearch }, ref) => {
       filter_obj['channels'] = id_str
       filter_obj['after'] = startStamp
       filter_obj['end'] = endStamp
+      // console.log('filter_obj::', filter_obj);
       setFilterData(filter_obj)
+      // 点击按钮过渡效果
       handleSearch()
       setIsSearch(true)
     }
@@ -209,9 +211,9 @@ const Aside = forwardRef(({ handleSearch }, ref) => {
           </ul>
         </div>
       </div>
-      <div className={`${AsideStyle.button} ${allSel ? AsideStyle.highLight : ""}`} onTouchStart={() => searchFunc()}>
+      <div className={`${AsideStyle.button} ${allSel ? AsideStyle.highLight : ""}`}>
         <img src={search} alt="img" className={allSel ? AsideStyle.move : ""} />
-        <span className={allSel ? AsideStyle.move : ""}>SEARCH</span>
+        <span className={allSel ? AsideStyle.move : ""} onTouchStart={() => searchFunc()}>SEARCH</span>
         <p className={allSel ? AsideStyle.show : ""}>{channel} activities {buttonTip}</p>
       </div>
     </aside>

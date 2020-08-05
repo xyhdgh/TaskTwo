@@ -8,8 +8,7 @@ const baseUrl = 'http://localhost:3000/api/v1'
  * @param {*} payload 
  */
 export const login = async (url, payload) => {
-  let res = await axios.post(`${baseUrl}${url}`, payload)
-  return res;
+  return await axios.post(`${baseUrl}${url}`, payload)
 }
 /**
  * 用户注册
@@ -17,8 +16,7 @@ export const login = async (url, payload) => {
  * @param {*} payload 
  */
 export const register = async (url, payload) => {
-  let res = await axios.post(`${baseUrl}${url}`, payload)
-  return res;
+  return await axios.post(`${baseUrl}${url}`, payload)
 }
 
 /**
@@ -27,13 +25,11 @@ export const register = async (url, payload) => {
  * @param {*} token 
  */
 export const cancel_login = async (url, token) => {
-  // console.log(url, token)
-  let res = await axios.delete(`${baseUrl}${url}`, {
+  return await axios.delete(`${baseUrl}${url}`, {
     headers: {
       "X-BLACKCAT-TOKEN": token
     }
   })
-  return res
 }
 
 /**
@@ -95,6 +91,156 @@ export const get_event_detail = async (url, token) => {
  */
 export const get_event_participants = async (url, token) => {
   return await axios.get(`${baseUrl}${url}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户参与
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const join_event_participants = async (url, token) => {
+  return await axios.post(`${baseUrl}${url}`, {}, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户取消参与
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const cancel_event_participants = async (url, token) => {
+  return await axios.delete(`${baseUrl}${url}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户获取评论
+ * @param {*} url 
+ * @param {*} payload 
+ * @param {*} token 
+ */
+export const get_event_comments = async (url, payload, token) => {
+  let defaultObj = {
+    offset: 0,
+    limit: 25
+  }
+  let currentObj = Object.assign(defaultObj, payload)
+  let arr = []
+  Object.keys(currentObj).forEach((key) => {
+    arr.push(`${key}=${currentObj[key]}`)
+  })
+  let str = arr.join('&')
+  return await axios.get(`${baseUrl}${url}?${str}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户发表评论
+ * @param {*} url 
+ * @param {*} payload 
+ * @param {*} token 
+ */
+export const post_event_comments = async (url, payload, token) => {
+  return await axios.post(`${baseUrl}${url}`, payload, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户获取当前event likes的列表
+ * @param {*} url 
+ * @param {*} payload 
+ * @param {*} token 
+ */
+export const get_event_likes = async (url, payload, token) => {
+  let defaultObj = {
+    offset: 0,
+    limit: 25
+  }
+  let currentObj = Object.assign(defaultObj, payload)
+  let arr = []
+  Object.keys(currentObj).forEach((key) => {
+    arr.push(`${key}=${currentObj[key]}`)
+  })
+  let str = arr.join('&')
+  return await axios.get(`${baseUrl}${url}?${str}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户点赞
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const post_event_likes = async (url, token) => {
+  return await axios.post(`${baseUrl}${url}`, {}, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户取消点赞
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const cancel_event_likes = async (url, token) => {
+  return await axios.delete(`${baseUrl}${url}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户获取个人信息
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const get_user = async (url, token) => {
+  return await axios.get(`${baseUrl}${url}`, {
+    headers: {
+      "X-BLACKCAT-TOKEN": token
+    }
+  })
+}
+
+/**
+ * 用户获取参与活动信息
+ * @param {*} url 
+ * @param {*} token 
+ */
+export const get_user_events = async (url, payload, token) => {
+  let defaultObj = {
+    offset: 0,
+    limit: 25
+  }
+  let currentObj = Object.assign(defaultObj, payload)
+  let arr = []
+  Object.keys(currentObj).forEach((key) => {
+    arr.push(`${key}=${currentObj[key]}`)
+  })
+  let str = arr.join('&')
+  return await axios.get(`${baseUrl}${url}?${str}`, {
     headers: {
       "X-BLACKCAT-TOKEN": token
     }
